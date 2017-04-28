@@ -11,7 +11,7 @@ public class ControlManager : MonoBehaviour {
     private int _size;
     private int[] _indexs;
 	void Start () {
-        _size = gameboard.GetComponent<GemGeneretor>().sizeOfBoard;
+       
         /*_indexs is used to save the highlighted index of gems*/
         _indexs = new int[4];
         /*Initial all the index to -1*/
@@ -45,6 +45,7 @@ public class ControlManager : MonoBehaviour {
     }
     void HighLight(GameObject ball)
     {
+        _size = gameboard.GetComponent<GemGeneretor>().sizeOfBoard;
         /*Before highlight the new one, close the highlight of the origin one*/
         DeHighLight();
         gems = gameboard.GetComponent<GemGeneretor>().gems;
