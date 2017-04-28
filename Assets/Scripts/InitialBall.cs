@@ -13,6 +13,7 @@ public class InitialBall : MonoBehaviour {
     /*Private variable*/
     private bool _isPlayAnimation = false;
     private float _originScale;
+    private bool _playDestroyAnimation = false;
 
 	
 	void Start () {
@@ -22,6 +23,7 @@ public class InitialBall : MonoBehaviour {
 	
 	
 	void Update () {
+        /*Animation for shown*/
         if (!_isPlayAnimation)
         {
             this.transform.localScale *= Time.deltaTime * shownSpeed*60;
@@ -31,6 +33,13 @@ public class InitialBall : MonoBehaviour {
                 _isPlayAnimation = true;
             }
         }
+        /*Animation for destroy*/
+        if (_playDestroyAnimation)
+        {
+            this.transform.localScale /= Time.deltaTime * shownSpeed * 60;
+            if (this.transform.localScale.x <= 0.01f)
+                Destroy(this.gameObject);
+        }
 
 	}
     /*Initial the ball with type and material*/
@@ -39,4 +48,10 @@ public class InitialBall : MonoBehaviour {
         this.GetComponent<MeshRenderer>().material = _material;
         this.type = _type;
     }
+    /*Destroy the ball*/
+    public void playAnimationandDestroy()
+    {
+        _playDestroyAnimation = true;
+    }
+
 }

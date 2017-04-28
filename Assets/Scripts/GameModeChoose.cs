@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿/*Choose level and start the game with paremeter*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ public class GameModeChoose : MonoBehaviour {
     public GameObject[] buttons;
     public GameObject Gameboard;
     public GameObject uis;
+    /*Set basic length of the board*/
     public int easyModeSize;
    
     /*private Variable*/
@@ -29,7 +31,6 @@ public class GameModeChoose : MonoBehaviour {
 	}
     void StartGame(int num)
     {
-        Debug.Log(num);
         Gameboard.GetComponent<GemGeneretor>().sizeOfBoard = num;
         Gameboard.SetActive(true);
         uis.SetActive(false);
