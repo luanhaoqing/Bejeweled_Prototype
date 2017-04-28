@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿/*This script is used to initial Ball's type and play the initial animation*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
