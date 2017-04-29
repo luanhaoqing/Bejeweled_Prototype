@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ControlManager : MonoBehaviour {
     /*Public variable*/
-    public bool CouldChoose=true;
+    public int PlayerMode=0;//0 for playerMode, 1 for exchange mode, 2 for remove mode, 3 for generate mode
     public GameObject gameboard;
     public float moveSpeed;
     /*Private variable*/
@@ -31,7 +31,7 @@ public class ControlManager : MonoBehaviour {
 	void Update () {
        
         // this code show nameobject with click   
-        if (Input.GetMouseButtonDown(0)&& CouldChoose)
+        if (Input.GetMouseButtonDown(0)&& PlayerMode==0)
         {
             Debug.Log("Pressed left click.");
             //empty RaycastHit object which raycast puts the hit details into
@@ -69,7 +69,7 @@ public class ControlManager : MonoBehaviour {
             if(_currentGem.transform.position==_lastPos&& _selectedGem.transform.position==_currentPos)
             {
                 _ischange = false;
-                CouldChoose = true;
+                PlayerMode = 2;
                 _selectedGem = null;
             }
         }
@@ -133,7 +133,8 @@ public class ControlManager : MonoBehaviour {
         {
             if (_indexs[i] != -1)
             {
-                gems[_indexs[i]].GetComponent<blink>().enabled = false;
+                if(gems[_indexs[i]]!=null)
+                    gems[_indexs[i]].GetComponent<blink>().enabled = false;
             }
         }
     }
@@ -157,7 +158,7 @@ public class ControlManager : MonoBehaviour {
     void ExchangeGems(GameObject last, GameObject current)
     {
         //block the choose mode
-        CouldChoose = false;
+        PlayerMode = 1;
         //exchange gems logically
         _size = gameboard.GetComponent<GemGeneretor>().sizeOfBoard;
         gems = gameboard.GetComponent<GemGeneretor>().gems;

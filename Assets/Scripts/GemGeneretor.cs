@@ -43,4 +43,12 @@ public class GemGeneretor : MonoBehaviour {
             }
         }
     }
+    public void GenerateOneGem(int index, Vector3 Targetposition)
+    {
+        GameObject tmp = Instantiate(gemPrefab);
+        int randNum = Random.Range(0, _gemTypeNumber);
+        tmp.GetComponent<InitialBall>().Initial(Materials[randNum], randNum);
+        tmp.transform.position = Targetposition;
+        gems[index] = tmp;
+    }
 }
