@@ -6,12 +6,18 @@ public class ControlManager : MonoBehaviour {
     /*Public variable*/
     public bool CouldChoose=true;
     public GameObject gameboard;
+    public float moveSpeed;
     /*Private variable*/
     private GameObject[] gems;
     private int _size;
     private int[] _indexs;
-	void Start () {
-       
+    private GameObject _selectedGem;
+    private bool _ischange=false;
+    private GameObject _currentGem;
+    private Vector3 _currentPos;
+    private Vector3 _lastPos;
+
+    void Start () {
         /*_indexs is used to save the highlighted index of gems*/
         _indexs = new int[4];
         /*Initial all the index to -1*/
@@ -33,16 +39,46 @@ public class ControlManager : MonoBehaviour {
             //ray shooting out of the camera from where the mouse is
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit,10))
+            if (Physics.Raycast(ray, out hit, 10))
             {
                 //print out the name if the raycast hits something
                 Debug.Log("hit");
-                HighLight(hit.transform.gameObject);
-
-
+                if (IsNeighbour(_selectedGem, hit.transform.gameObject))
+                {
+                    DeHighLight();
+                    /*Exchange gems*/
+                    ExchangeGems(_selectedGem, hit.transform.gameObject);     
+                }
+                else
+                {
+                    _selectedGem = hit.transform.gameObject;
+                    HighLight(hit.transform.gameObject);
+                }
             }
         }
+
+        /*Control of Exchange gems animation*/
+        if(_ischange)
+        {
+            /*set move speed*/
+            float step = moveSpeed * Time.deltaTime;
+            /*move two gems together*/
+           _currentGem.transform.position = Vector3.MoveTowards(_currentGem.transform.position, _lastPos, step);
+           _selectedGem.transform.position= Vector3.MoveTowards(_selectedGem.transform.position, _currentPos, step);
+            /*after move, set back to choose mode*/
+            if(_currentGem.transform.position==_lastPos&& _selectedGem.transform.position==_currentPos)
+            {
+                _ischange = false;
+                CouldChoose = true;
+                _selectedGem = null;
+            }
+        }
+
+
+
     }
+
+    /*Use this function to high light gems surround the selected gem*/
     void HighLight(GameObject ball)
     {
         _size = gameboard.GetComponent<GemGeneretor>().sizeOfBoard;
@@ -81,7 +117,7 @@ public class ControlManager : MonoBehaviour {
 
 
         /*Lower one*/
-        if (index + _size <=_size*_size)
+        if (index + _size <_size*_size)
         {
             gems[index + _size].GetComponent<blink>().enabled = true;
             _indexs[3] = index + _size;
@@ -90,6 +126,7 @@ public class ControlManager : MonoBehaviour {
             _indexs[3] = -1;
 
     }
+    /*This function is to de-highlight the highlighted gems*/
     void DeHighLight()
     {
         for (int i = 0; i < 4; i++)
@@ -100,4 +137,41 @@ public class ControlManager : MonoBehaviour {
             }
         }
     }
+    /*This function return the boolean value of whether two selected gems are neighbours*/
+    bool IsNeighbour(GameObject last, GameObject current)
+    {
+        if (last == null)
+            return false;
+        _size = gameboard.GetComponent<GemGeneretor>().sizeOfBoard;
+        gems = gameboard.GetComponent<GemGeneretor>().gems;
+        int indexOfLast = System.Array.IndexOf(gems, last);
+        int indexOfCurrent= System.Array.IndexOf(gems, current);
+        if(indexOfCurrent== indexOfLast-1|| indexOfCurrent == indexOfLast + 1|| indexOfCurrent == indexOfLast +_size|| indexOfCurrent == indexOfLast -_size)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /*Enchange two gems logically, and then start the animation of exchange*/
+    void ExchangeGems(GameObject last, GameObject current)
+    {
+        //block the choose mode
+        CouldChoose = false;
+        //exchange gems logically
+        _size = gameboard.GetComponent<GemGeneretor>().sizeOfBoard;
+        gems = gameboard.GetComponent<GemGeneretor>().gems;
+        int indexOfLast = System.Array.IndexOf(gems, last);
+        int indexOfCurrent = System.Array.IndexOf(gems, current);
+        GameObject temp = gems[indexOfCurrent];
+        gems[indexOfCurrent] = gems[indexOfLast];
+        gems[indexOfLast] = temp;
+        _currentGem = current;
+
+        //set target move position, and start the animation
+        _currentPos = _currentGem.transform.position;
+        _lastPos = last.transform.position;
+        _ischange = true;
+    }
+
 }
