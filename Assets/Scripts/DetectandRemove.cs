@@ -5,15 +5,19 @@ using UnityEngine;
 
 public class DetectandRemove : MonoBehaviour {
     /*Public Variable*/
+
+    //Set the min value that could be removed in one line, default is 3.
     public int ThresholdNumToRemove;
     public GameObject ControlManager;
+
     /*Private Variable*/
     private int _boardsize;
     private GameObject[] _gems;
     private ArrayList _gemsToBeRemoved;
+
+
 	void Start () {
         _boardsize = this.GetComponent<GemGeneretor>().sizeOfBoard;
-
     }
 	
 	// Update is called once per frame

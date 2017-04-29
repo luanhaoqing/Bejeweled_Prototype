@@ -21,7 +21,7 @@ public class GameModeChoose : MonoBehaviour {
         {
             int _passbyValue = easyModeSize + 2 * (i);
             _btns[i] = buttons[i].GetComponent<Button>();
-            _btns[i].onClick.AddListener(delegate { StartGame(_passbyValue); }); 
+            _btns[i].onClick.AddListener(delegate { StartGame(_passbyValue,3); }); 
         }
 	}
 	
@@ -29,9 +29,12 @@ public class GameModeChoose : MonoBehaviour {
 	void Update () {
 		
 	}
-    void StartGame(int num)
+    void StartGame(int num, int threshold)
     {
+        //set the size of the board 
         Gameboard.GetComponent<GemGeneretor>().sizeOfBoard = num;
+        //set the min numbers that could be removed in one line
+        Gameboard.GetComponent<DetectandRemove>().ThresholdNumToRemove = threshold;
         Gameboard.SetActive(true);
         uis.SetActive(false);
         this.gameObject.SetActive(false);
