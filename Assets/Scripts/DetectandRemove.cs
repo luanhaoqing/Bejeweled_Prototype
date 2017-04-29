@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DetectandRemove : MonoBehaviour {
     /*Public Variable*/
@@ -9,7 +10,7 @@ public class DetectandRemove : MonoBehaviour {
     //Set the min value that could be removed in one line, default is 3.
     public int ThresholdNumToRemove;
     public GameObject ControlManager;
-
+    public GameObject ScoreBoard;
     /*Private Variable*/
     private int _boardsize;
     private GameObject[] _gems;
@@ -141,7 +142,11 @@ public class DetectandRemove : MonoBehaviour {
     /*Then generate new gems in that place*/
     public void RemoveandGenerateGems()
     {
-        while(_gemsToBeRemoved.Count>0)
+        string _text = ScoreBoard.GetComponent<Text>().text;
+        int score = (int.Parse(_text) + 100 * _gemsToBeRemoved.Count);
+        ScoreBoard.GetComponent<Text>().text = "" + score;
+
+        while (_gemsToBeRemoved.Count>0)
         {
             GameObject temp = (GameObject)_gemsToBeRemoved[0];
             _gemsToBeRemoved.RemoveAt(0);
@@ -155,14 +160,14 @@ public class DetectandRemove : MonoBehaviour {
     /*generate new gems*/
     private IEnumerator  GenerateNewGems(int index, Vector3 Prevposition)
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.5f);
         this.GetComponent<GemGeneretor>().GenerateOneGem(index, Prevposition);
 
     }
     /*After regenerate all the new gems, back to check mode*/
     private IEnumerator backtoCheckMode()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.7f);
         ControlManager.GetComponent<ControlManager>().PlayerMode = 2;
     }
 }

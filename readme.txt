@@ -24,3 +24,5 @@ Feature developed
 4. Refresh the board
 5. Highlight the gems which could be exchanged
 6. Use click instead of drag because click is a more direct way of using mouse.
+7. added basic score system(each gem removed add 100 points)
+8. added a exit button

@@ -178,7 +178,7 @@ public class ControlManager : MonoBehaviour {
     /*StartCheck*/
     IEnumerator StartCheck()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.8f);
         this.PlayerMode = 2;
         
     }
