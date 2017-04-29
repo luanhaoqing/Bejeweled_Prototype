@@ -33,7 +33,6 @@ public class ControlManager : MonoBehaviour {
         // this code show nameobject with click   
         if (Input.GetMouseButtonDown(0)&& PlayerMode==0)
         {
-            Debug.Log("Pressed left click.");
             //empty RaycastHit object which raycast puts the hit details into
             RaycastHit hit;
             //ray shooting out of the camera from where the mouse is
@@ -42,7 +41,6 @@ public class ControlManager : MonoBehaviour {
             if (Physics.Raycast(ray, out hit, 10))
             {
                 //print out the name if the raycast hits something
-                Debug.Log("hit");
                 if (IsNeighbour(_selectedGem, hit.transform.gameObject))
                 {
                     DeHighLight();

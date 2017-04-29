@@ -23,7 +23,8 @@ public class DetectandRemove : MonoBehaviour {
         {
             if(Detect())
             {
-                RemoveGems();
+                RemoveandGenerateGems();
+                ControlManager.GetComponent<ControlManager>().PlayerMode = 3;
             }
             else
             {
@@ -35,6 +36,7 @@ public class DetectandRemove : MonoBehaviour {
     }
     public bool Detect()
     {
+
         bool _detected=false;
         _gems = this.GetComponent<GemGeneretor>().gems;
         _gemsToBeRemoved = new ArrayList();
@@ -65,11 +67,14 @@ public class DetectandRemove : MonoBehaviour {
                         _detected = true;
                         for(int k=0;k<totalNum;k++)
                         {
-                            _gemsToBeRemoved.Add(_gems[_boardsize * i + j + k]);
+                            if (!_gemsToBeRemoved.Contains(_gems[_boardsize * i + j + k]))
+                                _gemsToBeRemoved.Add(_gems[_boardsize * i + j + k]);
                         }
                         
                     }
+                    j = j + totalNum-1;
                 }
+                
             }
         }
 
@@ -105,6 +110,7 @@ public class DetectandRemove : MonoBehaviour {
                         }
 
                     }
+                    i += totalNum-1;
                 }
             }
         }
@@ -120,13 +126,28 @@ public class DetectandRemove : MonoBehaviour {
             return false;
     }
 
-    public void RemoveGems()
+    public void RemoveandGenerateGems()
     {
         while(_gemsToBeRemoved.Count>0)
         {
             GameObject temp = (GameObject)_gemsToBeRemoved[0];
             _gemsToBeRemoved.RemoveAt(0);
+            int index= System.Array.IndexOf(_gems, temp);
+            StartCoroutine(GenerateNewGems(index,temp.transform.position));
             temp.GetComponent<InitialBall>().playAnimationandDestroy();
         }
+        StartCoroutine(backtoCheckMode());
+
+    }
+    private IEnumerator  GenerateNewGems(int index, Vector3 Prevposition)
+    {
+        yield return new WaitForSeconds(0.4f);
+        this.GetComponent<GemGeneretor>().GenerateOneGem(index, Prevposition);
+
+    }
+    private IEnumerator backtoCheckMode()
+    {
+        yield return new WaitForSeconds(1.5f);
+        ControlManager.GetComponent<ControlManager>().PlayerMode = 2;
     }
 }
