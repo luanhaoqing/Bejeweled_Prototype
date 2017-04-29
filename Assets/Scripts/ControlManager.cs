@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*Use this cript to control the movement of the gems, including select, highlight, exchange */
 public class ControlManager : MonoBehaviour {
     /*Public variable*/
-    public int PlayerMode=0;//0 for playerMode, 1 for exchange mode, 2 for remove mode, 3 for generate mode
+    public int PlayerMode;//0 for playerMode, 1 for exchange mode, 2 for remove mode, 3 for generate mode
     public GameObject gameboard;
     public float moveSpeed;
     /*Private variable*/
@@ -25,6 +25,9 @@ public class ControlManager : MonoBehaviour {
         {
             _indexs[i] = -1;
         }
+        /*Check if there are gems need to be removed at beginning*/
+        StartCoroutine(StartCheck());
+
     }
 	
 	
@@ -171,6 +174,13 @@ public class ControlManager : MonoBehaviour {
         _currentPos = _currentGem.transform.position;
         _lastPos = last.transform.position;
         _ischange = true;
+    }
+    /*StartCheck*/
+    IEnumerator StartCheck()
+    {
+        yield return new WaitForSeconds(1f);
+        this.PlayerMode = 2;
+        
     }
 
 }

@@ -1,6 +1,4 @@
 ﻿/*This Script is used to generate the board, initial gems, and resize the board.*/
-
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +41,7 @@ public class GemGeneretor : MonoBehaviour {
             }
         }
     }
+    /*Use this funciton to generate a new gem in the given position, and put the new gem into the gem list*/
     public void GenerateOneGem(int index, Vector3 Targetposition)
     {
         GameObject tmp = Instantiate(gemPrefab);

@@ -19,27 +19,34 @@ public class DetectandRemove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         int CurrentControlMode = ControlManager.GetComponent<ControlManager>().PlayerMode;
+        /*PlayerMode:2 means check mode*/
         if(CurrentControlMode==2)
         {
+            /*If there are gems to be removed*/
             if(Detect())
             {
+                /*Remove all the gems need to be removed*/
                 RemoveandGenerateGems();
+                /*enter re-generate mode*/
                 ControlManager.GetComponent<ControlManager>().PlayerMode = 3;
             }
             else
             {
+                /*If nothing to be removed, then back to player mode*/
                 ControlManager.GetComponent<ControlManager>().PlayerMode = 0;
             }
 
         }
 
     }
+
+    /*Use this function to detect whether there are gems need to be removed*/
     public bool Detect()
     {
-
         bool _detected=false;
         _gems = this.GetComponent<GemGeneretor>().gems;
         _gemsToBeRemoved = new ArrayList();
+
         /*Search through line*/
         for(int i=0;i<_boardsize;i++)
         {
@@ -116,6 +123,7 @@ public class DetectandRemove : MonoBehaviour {
         }
         return _detected;
     }
+    /*Used to compare whether two gems are the same type*/
     private bool CompareTwoGem(GameObject gem0, GameObject gem1)
     {
         if (gem0 == null || gem1 == null)
@@ -125,7 +133,8 @@ public class DetectandRemove : MonoBehaviour {
         else
             return false;
     }
-
+    /*remove all the gems in the should be removed list*/
+    /*Then generate new gems in that place*/
     public void RemoveandGenerateGems()
     {
         while(_gemsToBeRemoved.Count>0)
@@ -139,12 +148,14 @@ public class DetectandRemove : MonoBehaviour {
         StartCoroutine(backtoCheckMode());
 
     }
+    /*generate new gems*/
     private IEnumerator  GenerateNewGems(int index, Vector3 Prevposition)
     {
         yield return new WaitForSeconds(0.4f);
         this.GetComponent<GemGeneretor>().GenerateOneGem(index, Prevposition);
 
     }
+    /*After regenerate all the new gems, back to check mode*/
     private IEnumerator backtoCheckMode()
     {
         yield return new WaitForSeconds(1.5f);
